@@ -59,6 +59,8 @@ rect_width, rect_height = 100, 50
 rect_x, rect_y = 200, 150
 rect_speed = 5
 
+used = []
+
 # Main game loop
 while True:
     for event in pygame.event.get():
@@ -80,15 +82,24 @@ while True:
         rect_y += rect_speed
 
     window_surface.blit(loaded_image,(0, 0))  # Adjust the position as needed
-
+    
+    index = 0
     rect1=pygame.draw.rect(window_surface, BLACK, (rect_x, rect_y, rect_width, rect_height),1)
     for coordinates in level_1_coordinates:
-        tree1=draw_polygon_alpha(window_surface, (255, 255, 0, 127),
-        coordinates)
-
-    #if rect1.colliderect(tree1):
-        #print("Surfaces intersect! (Tree 1)")
-
+        tree1=draw_polygon_alpha(window_surface, (255, 255, 0, 127), coordinates)
+        index += 1
+        print(index)
+        if rect1.colliderect(tree1):
+            if index in used:
+                print("Already seen")
+                print(used)
+                print(index)
+            else:
+                used.append(index)
+                print("Added")
+                print(used)
+                print(index)
+            
     # Update the display
     pygame.display.update()
 #https://www.robots.ox.ac.uk/~vgg/software/via/via_demo.html
