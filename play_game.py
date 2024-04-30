@@ -40,7 +40,7 @@ def draw_polygon_alpha(surface, color, points):
     polygon=pygame.draw.polygon(shape_surf, color, [(x - min_x, y - min_y) for x, y in points],1)
 
     surface.blit(shape_surf, target_rect)
-    return polygon
+    return target_rect
 
 # Set up the display window
 window_size = (756, 756)
@@ -60,9 +60,14 @@ rect_x, rect_y = 200, 150
 rect_speed = 5
 
 used = []
+scoring = 0
+clock = pygame.time.Clock()
+scoring_dict = {'tree':[0,1,2,3,4,5,6],"rock":[7,8,9],'fish':[10,11,12,13],"cave":[14]}
+font = pygame.font.Font(None, 36)
 
 # Main game loop
 while True:
+    clock.tick(60)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -82,23 +87,39 @@ while True:
         rect_y += rect_speed
 
     window_surface.blit(loaded_image,(0, 0))  # Adjust the position as needed
+    score_text = font.render(f'Score: {scoring}', True, (255, 255, 255))
+    window_surface.blit(score_text, (10, 10))
     
     index = 0
     rect1=pygame.draw.rect(window_surface, BLACK, (rect_x, rect_y, rect_width, rect_height),1)
+    all_polygons = []
     for coordinates in level_1_coordinates:
         tree1=draw_polygon_alpha(window_surface, (255, 255, 0, 127), coordinates)
+        all_polygons.append(tree1)
+    pygame.display.update()
+    for polygon in all_polygons:
+        collide = pygame.Rect.colliderect(rect1, polygon)
+        if collide:
+            for key, value in scoring_dict.items():
+
+        #if rect1.colliderect(polygon):
+                if index in used:
+                    print("Already seen")
+                    print(index)
+                else:
+                    used.append(index)
+                    if index in value:
+                        if key == "tree":
+                            scoring += 1
+                        if key == "rock":
+                            scoring += 2
+                        if key == "fish":
+                            scoring += 3
+                        if key == "cave":
+                            scoring += 5
+                    print("Added")
+                    print(index)
         index += 1
-        print(index)
-        if rect1.colliderect(tree1):
-            if index in used:
-                print("Already seen")
-                print(used)
-                print(index)
-            else:
-                used.append(index)
-                print("Added")
-                print(used)
-                print(index)
             
     # Update the display
     pygame.display.update()
