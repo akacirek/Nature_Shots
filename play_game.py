@@ -30,8 +30,6 @@ lvl_3_background = "Nature_Shots_Level_3.png"
 lvl_4_background = "Nature_Shots_Level_4.png"
 lvl_5_background = "Nature_Shots_Level_5.png"
 
-
-
 # Initialize Pygame
 pygame.init()
 
@@ -66,6 +64,7 @@ rect_speed = 5
 lvl_coordinates = level_1_coordinates
 used = []
 scoring = 0
+scoring_list = []
 lvl = 1
 clock = pygame.time.Clock()
 lvl_1_scoring_dict = {'tree':[0,1,2,3,4,5,6],"rock":[7,8,9],'fish':[10,11,12,13],"cave":[14]}
@@ -79,28 +78,31 @@ while True:
     if lvl == 1:
         lvl_background = lvl_1_background
         lvl_scoring_dict = lvl_1_scoring_dict
-    if scoring >= 7 and lvl == 1:
+    if scoring >= 15 and lvl == 1:
         scoring = 0
         lvl = 2
         used = []
+        scoring_list = []
         lvl_background = lvl_2_background
         lvl_scoring_dict = lvl_2_scoring_dict
         lvl_coordinates = level_2_coordinates
-    if scoring >= 7 and lvl == 2:
+    if scoring >= 15 and lvl == 2:
         scoring = 0
         lvl = 3
         used = []
+        scoring_list = []
         lvl_background = lvl_3_background
         lvl_scoring_dict = lvl_3_scoring_dict
         lvl_coordinates = level_3_coordinates
-    if scoring >= 7 and lvl == 3:
+    if scoring >= 15 and lvl == 3:
         scoring = 0
         lvl = 4
         used = []
+        scoring_list = []
         lvl_background = lvl_4_background
         lvl_scoring_dict = lvl_4_scoring_dict
         lvl_coordinates = level_4_coordinates
-    if scoring >= 7 and lvl == 4:
+    if scoring >= 15 and lvl == 4:
         lvl = 5
         lvl_background = lvl_5_background
         lvl_coordinates = []
@@ -139,7 +141,7 @@ while True:
     for polygon in all_polygons:
         collide = pygame.Rect.colliderect(rect1, polygon)
         if collide:
-            for key, value in lvl_scoring_dict.items():
+
 
         #if rect1.colliderect(polygon):
                 if index in used:
@@ -147,7 +149,16 @@ while True:
                     print(index)
                 else:
                     used.append(index)
-                    if index in value:
+                    
+                    print("Added")
+                    print(index)
+        index += 1
+    for index in used:
+        if index in scoring_list:
+            continue
+        scoring_list.append(index)
+        for key, value in lvl_scoring_dict.items():
+            if index in value:
                         if key == "tree":
                             scoring += 1
                         if key == "rock":
@@ -182,10 +193,6 @@ while True:
                             scoring += 3
                         if key == 'igloo':
                             scoring += 5
-                    print("Added")
-                    print(index)
-        index += 1
-            
     # Update the display
     pygame.display.update()
 #https://www.robots.ox.ac.uk/~vgg/software/via/via_demo.html
